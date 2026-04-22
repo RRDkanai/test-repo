@@ -438,6 +438,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css">
 </head>
 <body>
   <header class="topbar">
@@ -463,6 +464,7 @@
       </div>
 
       <button class="signout">サインアウト</button>
+      <button class="signout" onclick="startTour()">ガイド開始</button>
     </div>
   </header>
 
@@ -625,6 +627,91 @@
       });
     }
   });
+</script>
+
+  <script type="module">
+  import Shepherd from 'https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.mjs';
+
+  const tour = new Shepherd.Tour({
+    useModalOverlay: true,
+    defaultStepOptions: {
+      cancelIcon: {
+        enabled: true
+      },
+      classes: 'shadow-md bg-white',
+      scrollTo: { behavior: 'smooth', block: 'center' }
+    }
+  });
+
+  tour.addStep({
+    id: 'dashboard',
+    title: 'ダッシュボード',
+    text: 'ここでは、印刷業務全体の状況をまとめて確認できます。',
+    attachTo: {
+      element: '.main-card',
+      on: 'bottom'
+    },
+    buttons: [
+      {
+        text: '次へ',
+        action() {
+          return this.next();
+        }
+      }
+    ]
+  });
+
+  tour.addStep({
+    id: 'nav-data',
+    title: 'データ',
+    text: 'ここから印刷データや関連ファイルを管理します。',
+    attachTo: {
+      element: 'a[href="data.html"]',
+      on: 'right'
+    },
+    buttons: [
+      {
+        text: '戻る',
+        action() {
+          return this.back();
+        }
+      },
+      {
+        text: '次へ',
+        action() {
+          return this.next();
+        }
+      }
+    ]
+  });
+
+  tour.addStep({
+    id: 'nav-storefront',
+    title: 'ストアフロント',
+    text: 'ここから商品を確認し、注文の流れにつなげます。',
+    attachTo: {
+      element: 'a[href="storefront.html"]',
+      on: 'right'
+    },
+    buttons: [
+      {
+        text: '戻る',
+        action() {
+          return this.back();
+        }
+      },
+      {
+        text: '完了',
+        action() {
+          return this.complete();
+        }
+      }
+    ]
+  });
+
+  window.startTour = function () {
+    tour.start();
+  };
 </script>
 </body>
 </html>
