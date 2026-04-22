@@ -5,91 +5,646 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>POD Dashboard Mock</title>
 
-  <!-- Shepherd CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css">
 
   <style>
+    :root {
+      --bg: #f5f6f3;
+      --card: #f7f7f3;
+      --text: #1f2a37;
+      --muted: #64748b;
+      --primary: #0f8f89;
+      --primary-dark: #0b6f6b;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      --radius-xl: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: sans-serif;
-      background: #f5f6f3;
+      font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 0% 20%, rgba(15, 143, 137, 0.12), transparent 28%),
+        radial-gradient(circle at 100% 20%, rgba(233, 179, 44, 0.10), transparent 25%),
+        var(--bg);
     }
 
     .topbar {
+      height: 108px;
+      border-bottom: 1px solid rgba(31, 42, 55, 0.08);
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      padding: 16px;
-      background: white;
-      border-bottom: 1px solid #ddd;
+      padding: 0 22px;
+      background: rgba(255, 255, 255, 0.28);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 280px;
+    }
+
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 26px;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip, .userbox, .ghost-btn, .langbox, .guide-btn {
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(31, 42, 55, 0.08);
+      box-shadow: var(--shadow);
+    }
+
+    .chip {
+      padding: 12px 18px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .langbox {
+      padding: 12px 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .ghost-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: var(--muted);
+    }
+
+    .userbox {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #cfe9e4;
+      color: var(--primary-dark);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .user-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .signout, .guide-btn {
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(31, 42, 55, 0.08);
+      background: rgba(255,255,255,0.78);
+      box-shadow: var(--shadow);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .guide-btn {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .page {
+      padding: 26px 18px 36px;
     }
 
     .layout {
-      display: flex;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
     }
 
-    .sidebar {
-      width: 220px;
-      padding: 20px;
-      background: #fafafa;
-      border-right: 1px solid #ddd;
+    .sidebar-card, .main-card, .status-card, .mini-card {
+      background: rgba(248, 248, 244, 0.82);
+      border: 1px solid rgba(31, 42, 55, 0.09);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-card {
+      padding: 26px 20px;
+    }
+
+    .sidebar-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .nav-item {
-      display: block;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: #eee;
-      border-radius: 6px;
+      height: 66px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 18px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #475569;
+      background: rgba(255,255,255,0.34);
       text-decoration: none;
-      color: black;
     }
 
-    .main {
-      padding: 30px;
-      flex: 1;
+    .nav-item.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.72);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1.1fr;
+      gap: 18px;
     }
 
     .main-card {
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
+      padding: 38px 34px 28px;
+      background:
+        linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(255,255,255,0.55) 45%, rgba(59, 130, 246, 0.06)),
+        rgba(248, 248, 244, 0.82);
+      min-height: 370px;
     }
 
-    button {
-      padding: 10px 16px;
-      margin-right: 10px;
+    h1 {
+      margin: 6px 0 18px;
+      font-size: 58px;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.7;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+      padding-top: 12px;
+    }
+
+    .stat {
+      border-left: 1px solid rgba(31, 42, 55, 0.08);
+      padding-left: 22px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+
+    .stat-value {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary, .btn-secondary {
+      height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.7);
+      color: var(--text);
+      border: 1px solid rgba(31, 42, 55, 0.08);
+    }
+
+    .status-card {
+      padding: 24px 24px 22px;
+      min-height: 370px;
+    }
+
+    .status-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .status-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .empty-box {
+      border: 1px dashed rgba(31, 42, 55, 0.12);
+      border-radius: 38px;
+      min-height: 132px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+      font-size: 14px;
+      line-height: 1.8;
+      background: rgba(255,255,255,0.24);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .mini-card {
+      padding: 26px 22px 20px;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mini-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .mini-label {
+      font-size: 14px;
+      color: #4b5563;
+      font-weight: 800;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+
+    .mini-value {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .mini-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      color: var(--primary);
+      border: 1px solid rgba(15, 143, 137, 0.15);
+      background: rgba(15, 143, 137, 0.08);
+      flex: 0 0 auto;
+    }
+
+    .mini-desc {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+      margin-top: 18px;
+    }
+
+    .arrow {
+      text-align: right;
+      color: var(--muted);
+      font-size: 24px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1280px) {
+      .hero-grid, .mini-grid { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 44px; }
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: 1fr 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .topbar {
+        height: auto;
+        padding: 16px;
+        align-items: flex-start;
+        gap: 16px;
+        flex-direction: column;
+      }
+      .topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+      .lead { font-size: 17px; }
+      .main-card, .status-card, .sidebar-card {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    .shepherd-element {
+      max-width: 360px;
     }
   </style>
 </head>
-
 <body>
-
-  <div class="topbar">
-    <div>POD Dashboard</div>
-    <button onclick="startTour()">ガイド開始</button>
-  </div>
-
-  <div class="layout">
-    <div class="sidebar">
-      <a href="index.html" class="nav-item">ダッシュボード</a>
-      <a href="data.html" class="nav-item">データ</a>
-      <a href="storefront.html" class="nav-item">ストアフロント</a>
-    </div>
-
-    <div class="main">
-      <div class="main-card">
-        <h1>ダッシュボード</h1>
-        <p>ここで全体の状況を確認できます。</p>
-        <button class="btn-primary">データハブ</button>
-        <button class="btn-secondary">ストアフロント</button>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">POD</div>
+      <div>
+        <div class="brand-title">Print On Demand</div>
+        <div class="brand-sub">印刷業務向けワークスペース</div>
       </div>
     </div>
+
+    <div class="topbar-right">
+      <div class="chip">2026/04/10 (金) 10:30</div>
+      <div class="langbox">🌐 日本語 ▾</div>
+      <div class="ghost-btn">☾</div>
+
+      <div class="userbox">
+        <div class="avatar">S</div>
+        <div>
+          <div class="user-name">satoru.kanai@rrd.com</div>
+          <div class="user-sub">印刷業務向けワークスペース</div>
+        </div>
+      </div>
+
+      <button class="signout">サインアウト</button>
+      <button class="guide-btn" onclick="startTour()">ガイド開始</button>
+    </div>
+  </header>
+
+  <div class="page">
+    <div class="layout">
+      <aside class="sidebar-card">
+        <div class="sidebar-label">ワークスペース</div>
+
+        <div class="nav">
+          <a href="index.html" class="nav-item active">
+            <div class="nav-icon">⌘</div>
+            ダッシュボード
+          </a>
+
+          <a href="data.html" class="nav-item">
+            <div class="nav-icon">⛁</div>
+            データ
+          </a>
+
+          <a href="storefront.html" class="nav-item">
+            <div class="nav-icon">⌂</div>
+            ストアフロント
+          </a>
+
+          <div class="nav-item">
+            <div class="nav-icon">🛒</div>
+            カート
+          </div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="hero-grid">
+          <div class="main-card">
+            <h1>ダッシュボード</h1>
+            <p class="lead">
+              会社のプリントオンデマンド利用状況の概要です。  
+              アップロード、商品状態、注文状況をひと目で確認できます。
+            </p>
+
+            <div class="stats-row">
+              <div class="stat">
+                <div class="stat-label">保管中のファイル</div>
+                <div class="stat-value">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">商品数</div>
+                <div class="stat-value">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">追跡中の注文</div>
+                <div class="stat-value">0</div>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button class="btn-primary">📄 データハブを開く</button>
+              <button class="btn-secondary">🛒 ストアフロントを見る</button>
+            </div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-title">✦ 商品の状態</div>
+            <div class="status-desc">
+              準備完了、待機中、確認が必要なものを把握できます。
+            </div>
+
+            <div class="empty-box">
+              まだ商品ステータスのデータがありません。  
+              ファイルをアップロードして最初の商品を作成すると表示されます。
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="mini-top">
+              <div>
+                <div class="mini-label">アップロード済みファイル</div>
+                <div class="mini-value">0</div>
+              </div>
+              <div class="mini-icon">📄</div>
+            </div>
+            <div class="mini-desc">
+              アップロードパイプラインに 0 B を保存しています。
+            </div>
+            <div class="arrow">→</div>
+          </div>
+
+          <div class="mini-card">
+            <div class="mini-top">
+              <div>
+                <div class="mini-label">総ストレージ容量</div>
+                <div class="mini-value">0 B</div>
+              </div>
+              <div class="mini-icon">⛁</div>
+            </div>
+            <div class="mini-desc">
+              アップロード済みアセット全体の保存容量です。
+            </div>
+            <div class="arrow">→</div>
+          </div>
+
+          <div class="mini-card">
+            <div class="mini-top">
+              <div>
+                <div class="mini-label">商品</div>
+                <div class="mini-value">0</div>
+              </div>
+              <div class="mini-icon">⬡</div>
+            </div>
+            <div class="mini-desc">
+              生産やストアフロントで利用できる商品です。
+            </div>
+            <div class="arrow">→</div>
+          </div>
+
+          <div class="mini-card">
+            <div class="mini-top">
+              <div>
+                <div class="mini-label">注文</div>
+                <div class="mini-value">0</div>
+              </div>
+              <div class="mini-icon">🛒</div>
+            </div>
+            <div class="mini-desc">
+              PODの運用内で進行中の注文です。
+            </div>
+            <div class="arrow">→</div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <!-- Shepherd本体 -->
-  <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const primaryButton = document.querySelector(".btn-primary");
+      const secondaryButton = document.querySelector(".btn-secondary");
 
-  <!-- ツアー設定 -->
+      const statValues = document.querySelectorAll(".stat-value");
+      const miniValues = document.querySelectorAll(".mini-value");
+
+      if (primaryButton) {
+        primaryButton.addEventListener("click", function () {
+          alert("データハブを開くボタンがクリックされました。");
+          if (statValues[0]) statValues[0].textContent = "12";
+          if (miniValues[0]) miniValues[0].textContent = "12";
+          if (miniValues[1]) miniValues[1].textContent = "24 MB";
+        });
+      }
+
+      if (secondaryButton) {
+        secondaryButton.addEventListener("click", function () {
+          alert("ストアフロントを見るボタンがクリックされました。");
+          if (statValues[1]) statValues[1].textContent = "3";
+          if (statValues[2]) statValues[2].textContent = "1";
+          if (miniValues[2]) miniValues[2].textContent = "3";
+          if (miniValues[3]) miniValues[3].textContent = "1";
+        });
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
   <script>
     const tour = new Shepherd.Tour({
       useModalOverlay: true,
@@ -107,16 +662,13 @@
         on: 'bottom'
       },
       buttons: [
-        {
-          text: '次へ',
-          action: tour.next
-        }
+        { text: '次へ', action: tour.next }
       ]
     });
 
     tour.addStep({
       title: 'データ',
-      text: 'ここから印刷データを管理します。',
+      text: 'ここから印刷データや関連ファイルを管理します。',
       attachTo: {
         element: 'a[href="data.html"]',
         on: 'right'
@@ -129,7 +681,7 @@
 
     tour.addStep({
       title: 'ストアフロント',
-      text: 'ここから注文につながります。',
+      text: 'ここから商品を確認し、注文の流れにつなげます。',
       attachTo: {
         element: 'a[href="storefront.html"]',
         on: 'right'
@@ -144,6 +696,5 @@
       tour.start();
     }
   </script>
-
 </body>
 </html>
