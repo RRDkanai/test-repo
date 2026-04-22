@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>POD Dashboard Mock</title>
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css">
-
   <style>
     :root {
       --bg: #f5f6f3;
@@ -417,6 +415,33 @@
       margin-top: 8px;
     }
 
+    .shepherd-element {
+      max-width: 360px;
+      background-color: #e6f4ff !important;
+      color: #1f2a37;
+      border-radius: 12px;
+    }
+
+    .shepherd-arrow:before {
+      background: #e6f4ff !important;
+    }
+
+    .shepherd-title {
+      color: #0b6f6b;
+      font-weight: bold;
+    }
+
+    .shepherd-button {
+      background: #0f8f89 !important;
+      color: white !important;
+      border-radius: 999px !important;
+    }
+
+    .shepherd-button-secondary {
+      background: #cfe9e4 !important;
+      color: #0b6f6b !important;
+    }
+
     @media (max-width: 1280px) {
       .hero-grid, .mini-grid { grid-template-columns: 1fr 1fr; }
       h1 { font-size: 44px; }
@@ -448,10 +473,6 @@
         padding-left: 20px;
         padding-right: 20px;
       }
-    }
-
-    .shepherd-element {
-      max-width: 360px;
     }
   </style>
 </head>
@@ -695,10 +716,10 @@
     function startTour() {
       tour.start();
     }
-    // ←これを追加
-window.addEventListener("load", function () {
-  tour.start();
-});
+
+    window.addEventListener("load", function () {
+      tour.start();
+    });
   </script>
 </body>
 </html>
